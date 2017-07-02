@@ -32,6 +32,21 @@ int main()
 {
   uWS::Hub h;
 
+  /*
+  Parameter Selection:
+  I initially wanted to use Twiddle, but then decided to see if I could manually figure out a set of values that works.
+  The values shown below are chosen manually after some trial and error and calculated guesses.
+
+
+  For example:
+  if the car doesnot correct itself or is too sluggish, Kp should be increased
+  if the car oscillates too much, Kd needs to be increased
+  if the correciton is not enough, Ki should be increased.
+
+  For the spped PID, I only use P and D. The logic here is that if the CTE error is too high throttle should be reduced.
+  */
+**********
+
   PID pid_steer;
   // TODO: Initialize the pid variable.
   double Kp = 0.25;
@@ -63,23 +78,20 @@ int main()
           double cte = std::stod(j[1]["cte"].get<std::string>());
           double speed = std::stod(j[1]["speed"].get<std::string>());
           double angle = std::stod(j[1]["steering_angle"].get<std::string>());
-          double steer_value;
-          double throttle = 0.6;
-          /*
-          * TODO: Calcuate steering value here, remember the steering value is
-          * [-1, 1].
-          * NOTE: Feel free to play around with the throttle and speed. Maybe use
-          * another PID controller to control the speed!
-          */
+          double steer_value; 
+          double throttle = 0.6;  //SOme fixed throttle value.This is the max throttle value.
+          
           pid_steer.UpdateError(cte);
           steer_value = -pid_steer.TotalError();
           
           // DEBUG
           std::cout << "CTE: " << cte << " Steering Value: " << steer_value << std::endl;
           pid_speed.UpdateError(cte);
+
+
           double throttle_d = fabs(pid_speed.TotalError());
           std::cout << "CTE: " << cte << " Throttle D Value: " << throttle_d << std::endl;
-          throttle -= throttle_d;
+          throttle -= throttle_d;  //Reduce throttle relative to CTE
           
           json msgJson;
           msgJson["steering_angle"] = steer_value;
