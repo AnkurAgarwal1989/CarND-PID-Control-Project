@@ -10,12 +10,15 @@ public:
   double i_error;
   double d_error;
 
+  double prev_error; //Holds prev error
+  double int_error;  //Integral error, sum
+
   /*
   * Coefficients
   */ 
-  double Kp;
-  double Ki;
-  double Kd;
+  double _Kp;
+  double _Ki;
+  double _Kd;
 
   /*
   * Constructor
