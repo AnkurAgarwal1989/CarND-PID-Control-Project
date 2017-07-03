@@ -45,7 +45,6 @@ int main()
 
   For the spped PID, I only use P and D. The logic here is that if the CTE error is too high throttle should be reduced.
   */
-**********
 
   PID pid_steer;
   // TODO: Initialize the pid variable.
